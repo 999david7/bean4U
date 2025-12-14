@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (homeBtn) {
     homeBtn.addEventListener('click', () => {
       // Simple relative navigation – adjust if you store home in a different folder
-      window.location.href = '/index.html';
+      window.location.href = '../index.html';
     });
   }
 });

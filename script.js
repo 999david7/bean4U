@@ -1,163 +1,75 @@
-/* ==========================================================
-   Beans4U Navigation Bubble + Consent Overlay
-   ========================================================== */
+/* ===============================
+   Navigation Bubble Animation
+   =============================== */
 
-/*  Bubble Animation  */
 const nav    = document.querySelector('.menu-container');
 const bubble = document.querySelector('.menu-bubble');
 const links  = [...document.querySelectorAll('.menu-list a')];
 
-let visible = false;
-let target  = {x:0,y:0,w:0,h:0};
-let state   = {x:0,y:0,w:0,h:0};
-let vel     = {x:0,y:0};
+let target = {x:0,y:0,w:0,h:0};
+let state  = {x:0,y:0,w:0,h:0};
 
-const lerp  = (a,b,t)=>a+(b-a)*t;
-const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
-
-function colourWithAlpha(css,alpha=0.18){
-  if(css.startsWith('#')){
-    const h=css.length===4?css.replace('#','').split('').map(c=>c+c).join(''):css.slice(1);
-    const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
-    return `rgba(${r},${g},${b},${alpha})`;
-  }
-  if(css.startsWith('rgb')){
-    const [r,g,b]=css.match(/[\d.]+/g).map(Number);
-    return `rgba(${r},${g},${b},${alpha})`;
-  }
-  return css;
-}
+const lerp = (a,b,t)=>a+(b-a)*t;
 
 function animate(){
-  state.x = lerp(state.x,target.x,0.25);
-  state.y = lerp(state.y,target.y,0.25);
-  state.w = lerp(state.w,target.w,0.25);
-  state.h = lerp(state.h,target.h,0.25);
+    state.x = lerp(state.x,target.x,0.2);
+    state.y = lerp(state.y,target.y,0.2);
+    state.w = lerp(state.w,target.w,0.2);
+    state.h = lerp(state.h,target.h,0.2);
 
-  vel.x   = lerp(vel.x,target.x-state.x,0.25);
-  vel.y   = lerp(vel.y,target.y-state.y,0.25);
+    bubble.style.transform =
+        `translate(${state.x}px,${state.y}px)`;
+    bubble.style.width  = `${state.w}px`;
+    bubble.style.height = `${state.h}px`;
 
-  const speed   = Math.hypot(vel.x,vel.y);
-  const stretch = clamp(speed/180,0,0.35);
-  const scaleX  = 1+(Math.abs(vel.x)>Math.abs(vel.y)?stretch:-stretch*0.6);
-  const scaleY  = 1+(Math.abs(vel.y)>Math.abs(vel.x)?stretch:-stretch*0.6);
-
-  bubble.style.transform =
-    `translate(${state.x}px,${state.y}px) scale(${scaleX},${scaleY})`;
-  bubble.style.width  = `${state.w}px`;
-  bubble.style.height = `${state.h}px`;
-
-  requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 }
-requestAnimationFrame(animate);
+animate();
 
 function focusLink(link){
-  const rL = link.getBoundingClientRect();
-  const rN = nav.getBoundingClientRect();
+    const rL = link.getBoundingClientRect();
+    const rN = nav.getBoundingClientRect();
 
-  target = {
-      x: rL.left - rN.left - 8,
-      y: rL.top  - rN.top  - 4,
-      w: rL.width + 16,
-      h: rL.height + 10
-  };
+    target = {
+        x: rL.left - rN.left - 8,
+        y: rL.top  - rN.top  - 4,
+        w: rL.width + 16,
+        h: rL.height + 10
+    };
 
-  const li          = link.parentElement;
-  const activeColor = getComputedStyle(li).getPropertyValue('--menu-link-active-color').trim();
-  bubble.style.setProperty('--bubble-bg',     colourWithAlpha(activeColor,0.16));
-  bubble.style.setProperty('--bubble-border', colourWithAlpha(activeColor,0.35));
-
-  if(!visible){visible=true;bubble.style.opacity=1;}
+    bubble.style.opacity = 1;
 }
 
 links.forEach(a=>{
-  a.addEventListener('mouseenter',()=>focusLink(a));
-  a.addEventListener('focus',     ()=>focusLink(a));
+    a.addEventListener('mouseenter',()=>focusLink(a));
+    a.addEventListener('focus',()=>focusLink(a));
 });
+
 nav.addEventListener('mouseleave',()=>{
-  visible=false;
-  bubble.style.opacity=0;
+    bubble.style.opacity = 0;
 });
-nav.addEventListener('touchstart',e=>{
-  const a=e.target.closest('a');if(a)focusLink(a);
-},{passive:true});
 
+/* ===============================
+   Consent Overlay
+   =============================== */
 
-/* ==========================================================
-   ✅ Terms & Privacy Consent Overlay
-   ========================================================== */
+document.addEventListener("DOMContentLoaded",()=>{
+    const key="beans4u_terms_agreed";
+    if(localStorage.getItem(key)) return;
 
-window.addEventListener("DOMContentLoaded", () => {
-  const STORAGE_KEY = "beans4u_terms_agreed";
-  const EXPIRY_DAYS = 365;
-
-  // Check consent status
-  const consentData = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-  const now = new Date().getTime();
-  const expired =
-    !consentData.timestamp ||
-    (now - consentData.timestamp) > EXPIRY_DAYS * 24 * 60 * 60 * 1000;
-
-  if (!consentData.agreed || expired) {
-    const overlay = document.createElement("div");
-    overlay.id = "consent-overlay";
-    overlay.innerHTML = `
-      <div id="consent-box">
-        <h2>Welcome to Bean4U ☕</h2>
-        <p>
-          Please review and accept our
-          <a href="/terms.html" target="_blank">Terms & Conditions</a> and
-          <a href="/privacy.html" target="_blank">Privacy Policy</a> to continue.
-        </p>
-        <button id="agree-btn">I Agree</button>
-      </div>
-    `;
+    const overlay=document.createElement("div");
+    overlay.className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-75";
+    overlay.innerHTML=`
+    <div class="bg-white text-dark p-4 rounded text-center" style="max-width:420px">
+      <h4>Welcome to Bean4U ☕</h4>
+      <p>Please accept our Terms & Privacy Policy.</p>
+      <button class="btn btn-primary mt-3">I Agree</button>
+    </div>
+  `;
     document.body.appendChild(overlay);
 
-    // Add styles
-    const style = document.createElement("style");
-    style.textContent = `
-      #consent-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.85);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-      }
-      #consent-box {
-        background: #fff;
-        color: #333;
-        border-radius: 12px;
-        padding: 30px 40px;
-        max-width: 420px;
-        text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        font-family: "Segoe UI", sans-serif;
-        line-height: 1.5;
-      }
-      #consent-box a { color: #6b4f4f; text-decoration: underline; }
-      #consent-box button {
-        margin-top: 20px;
-        padding: 10px 22px;
-        background: #6b4f4f;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-      }
-      #consent-box button:hover { background: #845829; }
-    `;
-    document.head.appendChild(style);
-
-    // Handle click
-    document.getElementById("agree-btn").addEventListener("click", () => {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ agreed: true, timestamp: new Date().getTime() })
-      );
-      overlay.remove();
-    });
-  }
+    overlay.querySelector("button").onclick=()=>{
+        localStorage.setItem(key,"true");
+        overlay.remove();
+    };
 });
