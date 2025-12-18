@@ -60,12 +60,12 @@ document.addEventListener("DOMContentLoaded",()=>{
     const overlay=document.createElement("div");
     overlay.className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-75";
     overlay.innerHTML=`
-    <div class="bg-white text-dark p-4 rounded text-center" style="max-width:420px">
-      <h4>Welcome to Bean4U ☕</h4>
-      <p>Please accept our Terms & Privacy Policy.</p>
-      <button class="btn btn-primary mt-3">I Agree</button>
-    </div>
-  `;
+        <div class="bg-white text-dark p-4 rounded text-center shadow" style="max-width:420px">
+            <h4>Welcome to Bean4U ☕</h4>
+            <p>Please accept our Terms & Privacy Policy.</p>
+            <button class="btn btn-primary mt-3">I Agree</button>
+        </div>
+    `;
     document.body.appendChild(overlay);
 
     overlay.querySelector("button").onclick=()=>{

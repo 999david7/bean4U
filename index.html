@@ -2,20 +2,19 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>bean4U</title>
 
-    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap 5 -->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
     />
 
-    <!-- Eigene Styles -->
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css" />
 
     <style>
-        /* Chatbase Bubble links unten */
         #chatbase-bubble {
             right: auto !important;
             left: 20px !important;
@@ -24,9 +23,9 @@
     </style>
 </head>
 
-<body class="text-light">
+<body class="text-light d-flex flex-column align-items-center">
 
-<!-- Hintergrund -->
+<!-- Background -->
 <div class="bg-cover"></div>
 
 <!-- Header -->
@@ -34,40 +33,37 @@
     bean4U
 </header>
 
-<div class="slogan text-center">
+<div class="slogan text-center mb-4">
     your coffee your choice
 </div>
 
 <!-- Navigation -->
-<nav class="menu-container container">
+<nav class="menu-container container-lg my-3">
     <span class="menu-bubble" aria-hidden="true"></span>
 
     <ul class="menu-list">
         <li><a href="Rezepte (2)/Rezepte2.html">Recipes</a></li>
         <li><a href="About/About.html">About</a></li>
         <li><a href="Services/Services.html">Our recommendation</a></li>
-        <li><a href="Log in/Log in.html">Log&nbsp;in</a></li>
+        <li><a href="Log in/Log in.html">Log in</a></li>
         <li><a href="Contact/Contact.html">Contact</a></li>
     </ul>
 </nav>
 
 <!-- Buy me a coffee -->
 <a
-        class="buy-coffee-btn btn"
+        class="buy-coffee-btn btn btn-lg shadow"
         href="#"
         role="button"
         aria-label="Buy me a coffee"
-        title="Buy me a coffee"
 >
     Buy me a coffee
 </a>
 
 <!-- Bootstrap JS -->
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Eigene Scripts -->
+<!-- Custom Script -->
 <script src="script.js"></script>
 
 <!-- Chatbase -->

@@ -1,10 +1,9 @@
 :root{
-    --primary-color:#007bff;
-    --info-color:#17a2b8;
-    --success-color:#28a745;
+    --primary-color:#0d6efd;
+    --info-color:#0dcaf0;
+    --success-color:#198754;
     --warning-color:#ffc107;
     --danger-color:#dc3545;
-    --grey-color:#ffffff;
 }
 
 *{
@@ -16,11 +15,11 @@
 body{
     font-family:monospace;
     min-height:100vh;
-    overflow-x:hidden;
     background:#000;
+    overflow-x:hidden;
 }
 
-/* Hintergrund */
+/* Background */
 .bg-cover{
     position:fixed;
     inset:0;
@@ -30,53 +29,53 @@ body{
 
 /* Headline */
 .headline{
-    font-size:clamp(3rem,10vw,10rem);
+    font-size:clamp(3rem,10vw,9rem);
     font-weight:700;
-    margin-top:3vh;
-    color:#fff;
+    margin-top:4vh;
 }
 
 /* Slogan */
 .slogan{
-    font-size:clamp(1rem,3vw,3rem);
+    font-size:clamp(1.2rem,3vw,2.5rem);
     font-weight:700;
-    margin-bottom:2rem;
     color:#856a54;
     font-family:'Courier New';
 }
 
-/* Menü Container */
+/* Menu Container */
 .menu-container{
-    width:min(85vw,960px);
-    padding:24px 32px;
-    border-radius:36px;
+    padding:1.5rem 2rem;
+    border-radius:2.5rem;
     background:rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(160%);
-    border:1px solid rgba(255,255,255,.20);
+    border:1px solid rgba(255,255,255,.2);
     box-shadow:
             0 1px 2px rgba(255,255,255,.15) inset,
-            0 6px 18px rgba(0,0,0,.15);
+            0 6px 18px rgba(0,0,0,.2);
     position:relative;
 }
 
-/* Menü Liste */
+/* Menu List */
 .menu-list{
     display:flex;
     flex-wrap:wrap;
-    gap:48px;
+    gap:2.5rem;
     justify-content:center;
     list-style:none;
+    margin:0;
+    padding:0;
 }
 
 .menu-list a{
-    padding:10px 16px;
-    font-size:1.35rem;
+    padding:.6rem 1rem;
+    font-size:1.3rem;
     font-weight:600;
     color:#fff;
     text-decoration:none;
+    white-space:nowrap;
 }
 
-/* Farbzuweisung */
+/* Color mapping */
 .menu-list li:nth-child(1){--menu-link-active-color:var(--primary-color)}
 .menu-list li:nth-child(2){--menu-link-active-color:var(--info-color)}
 .menu-list li:nth-child(3){--menu-link-active-color:var(--success-color)}
@@ -88,22 +87,20 @@ body{
     position:absolute;
     top:0;
     left:0;
-    width:200px;
-    height:48px;
-    border-radius:32px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.25);
+    border-radius:2rem;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.3);
     pointer-events:none;
     opacity:0;
     transform:translate(-9999px,-9999px);
 }
 
-/* Buy me a coffee */
+/* Buy Coffee Button */
 .buy-coffee-btn{
     position:fixed;
     right:1.2rem;
     bottom:1.2rem;
-    padding:.9rem 1.4rem;
+    padding:.8rem 1.4rem;
     border-radius:999px;
     font-weight:700;
     background:linear-gradient(135deg,#ffe29a,#ffc107,#ff8c00);
@@ -117,7 +114,16 @@ body{
 }
 
 /* Responsive */
-@media(max-width:768px){
-    .menu-list{gap:24px}
-    .menu-list a{font-size:1.1rem}
+@media (max-width: 768px){
+    .menu-list{
+        gap:1.2rem;
+    }
+
+    .menu-list a{
+        font-size:1.05rem;
+    }
+
+    .headline{
+        margin-top:2rem;
+    }
 }
