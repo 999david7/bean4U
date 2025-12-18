@@ -1,131 +1,86 @@
 :root {
-  --text-main: #88501b;
-  --text-subtle: #b16d35;
-  --accent: #ffe0b2;
-  --accent-dark: #bcaaa4;
-  --radius: 12px;
-  --transition: all 0.3s ease;
-  font-size: 16px;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    --text-main: #88501b;
+    --text-subtle: #b16d35;
+    --accent: #ffe0b2;
+    --accent-dark: #bcaaa4;
+    --radius: 14px;
+    --transition: all 0.3s ease;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background: url("../imgs/contact imgs/6FA2279C-F9DD-4F6D-9079-610B097BA06E.PNG") no-repeat center center/cover;
-  min-height: 100vh;
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
+    font-family: 'Inter', sans-serif;
+    background: url("../imgs/contact imgs/6FA2279C-F9DD-4F6D-9079-610B097BA06E.PNG")
+    no-repeat center center / cover;
+    color: var(--text-main);
 }
 
-/* Container */
-.wrapper {
-  width: 100%;
-  max-width: 700px;
-}
-
-/* Liquid glass effect */
-.card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius);
-  padding: 2.5rem 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+/* Glass Card */
+.card-glass {
+    max-width: 720px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 /* Typography */
 h1 {
-  font-size: 2.25rem;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    color: var(--accent);
 }
 
 .subtitle {
-  color: var(--text-subtle);
-  margin-bottom: 2rem;
-  line-height: 1.5;
+    color: var(--text-subtle);
+    line-height: 1.5;
 }
 
-/* Form layout */
-.contact-form .input-row {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+/* Bootstrap form overrides */
+.form-label {
+    font-weight: 600;
+    color: var(--accent);
 }
 
-.field {
-  flex: 1 1 240px;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 2rem;
+.form-control {
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    padding: 0.75rem 1rem;
 }
 
-label {
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  color: var(--accent);
+.form-control::placeholder {
+    color: #b67c67aa;
 }
 
-input,
-textarea {
-  font: inherit;
-  background: rgba(255, 255, 255, 0.8);
-  color: #3e2723;
-  border: none;
-  border-radius: var(--radius);
-  padding: 0.75rem 1rem;
-  transition: var(--transition);
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 0 2px rgba(255, 224, 178, 0.6);
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: #b67c67aa;
+/* Coffee Button */
+.btn-coffee {
+    background: var(--accent);
+    color: #3e2723;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.8rem 2.5rem;
+    border: none;
+    transition: var(--transition);
 }
 
-input:focus,
-textarea:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 2px rgba(255, 224, 178, 0.6);
-}
-
-/* Button */
-.btn-primary {
-  background: var(--accent);
-  color: #3e2723;
-  font-weight: 600;
-  border: none;
-  padding: 0.9rem 2.5rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.btn-primary:hover,
-.btn-primary:focus {
-  background: var(--accent-dark);
-  color: rgb(255, 255, 255);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+.btn-coffee:hover,
+.btn-coffee:focus {
+    background: var(--accent-dark);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 /* Mobile */
-@media (max-width: 500px) {
-  h1 {
-    font-size: 1.8rem;
-  }
-
-  .card {
-    padding: 2rem 1.25rem;
-  }
+@media (max-width: 576px) {
+    .card-glass {
+        padding: 2rem 1.5rem;
+    }
 }
