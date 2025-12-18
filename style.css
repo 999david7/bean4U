@@ -37,7 +37,6 @@ body{
 
 /* Slogan */
 .slogan{
-    min-width: auto;
     font-size: min(28px, 18rem);
     font-weight:700;
     color:#856a54;
