@@ -38,7 +38,7 @@ body{
 /* Slogan */
 .slogan{
     min-width: auto;
-    font-size: min(30px, 20rem);
+    font-size: min(28px, 18rem);
     font-weight:700;
     color:#856a54;
     font-family:'Courier New';
@@ -100,9 +100,9 @@ body{
 /* Buy Coffee Button */
 .buy-coffee-btn{
     min-height: 6vh;
-    min-width: 30vh;
+    min-width: 32vh;
     max-height: 8vh;
-    max-width: 32vh;
+    max-width: 34vh;
     position:fixed;
     right:1.2rem;
     bottom:1.2rem;
