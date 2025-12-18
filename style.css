@@ -17,6 +17,7 @@ body{
     min-height:100vh;
     background:#000;
     overflow-x:hidden;
+    padding:24px;
 }
 
 /* Background */
@@ -29,14 +30,15 @@ body{
 
 /* Headline */
 .headline{
-    font-size:clamp(3rem,10vw,9rem);
+    font-size: min(100px, 20rem);
     font-weight:700;
     margin-top:4vh;
 }
 
 /* Slogan */
 .slogan{
-    font-size:clamp(1.2rem,3vw,2.5rem);
+    min-width: auto;
+    font-size: min(30px, 20rem);
     font-weight:700;
     color:#856a54;
     font-family:'Courier New';
@@ -113,17 +115,61 @@ body{
     content:"☕ ";
 }
 
-/* Responsive */
+/* ============================================================
+   Mobile: simpler layout (stacked nav, no bubble, no clutter)
+   ============================================================ */
 @media (max-width: 768px){
-    .menu-list{
-        gap:1.2rem;
-    }
-
-    .menu-list a{
-        font-size:1.05rem;
+    body{
+        padding:16px;
     }
 
     .headline{
-        margin-top:2rem;
+        min-height: 60px;
+        min-width: auto;
+        margin-top:16px;
+    }
+
+    .slogan{
+        min-height: 35px;
+        min-width: auto;
+        margin-bottom:16px;
+    }
+
+    .menu-container{
+        width:100%;
+        padding:12px;
+        border-radius:18px;
+    }
+
+    .menu-bubble{
+        display:none !important;
+    }
+
+    .menu-list{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+        align-items:stretch;
+    }
+
+    .menu-list a{
+        display:block;
+        width:100%;
+        text-align:center;
+        font-size:1.05rem;
+        padding:14px 12px;
+        border-radius:14px;
+        background:rgba(255,255,255,.10);
+        border:1px solid rgba(255,255,255,.18);
+    }
+
+    .buy-coffee-btn{
+        position:static;
+        display:block;
+        width:100%;
+        margin-top:14px;
+        text-align:center;
     }
 }
+
+
