@@ -21,7 +21,6 @@
 </head>
 
 <body>
-<!-- Background layers -->
 <div class="bg-cover" aria-hidden="true"></div>
 
 <div class="bg-orbs" aria-hidden="true">
@@ -35,15 +34,17 @@
 <main class="page">
     <header class="hero">
         <h1 class="headline">bean4U</h1>
-        <p class="slogan">your coffee<br />your choice</p>
+        <p class="slogan">your coffee your choice</p>
 
         <nav class="menu-container" aria-label="Primary">
+            <span class="menuHoverPill" aria-hidden="true"></span>
+
             <ul class="menu-list">
-                <li><a href="Rezepte (2)/Rezepte2.html">Recipes</a></li>
-                <li><a href="About/About.html">About</a></li>
-                <li><a href="Services/Services.html">Our recommendation</a></li>
-                <li><a href="Log in/Log in.html">Log in</a></li>
-                <li><a href="Contact/Contact.html">Contact</a></li>
+                <li><a href="Rezepte (2)/Rezepte2.html" data-pill="recipes">Recipes</a></li>
+                <li><a href="About/About.html" data-pill="about">About</a></li>
+                <li><a href="Services/Services.html" data-pill="recommendation">Our recommendation</a></li>
+                <li><a href="Log in/Log in.html" data-pill="login">Log in</a></li>
+                <li><a href="Contact/Contact.html" data-pill="contact">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -62,16 +63,12 @@
     (function () {
         if (!window.chatbase || window.chatbase("getState") !== "initialized") {
             window.chatbase = (...arguments) => {
-                if (!window.chatbase.q) {
-                    window.chatbase.q = [];
-                }
+                if (!window.chatbase.q) window.chatbase.q = [];
                 window.chatbase.q.push(arguments);
             };
             window.chatbase = new Proxy(window.chatbase, {
                 get(target, prop) {
-                    if (prop === "q") {
-                        return target.q;
-                    }
+                    if (prop === "q") return target.q;
                     return (...args) => target(prop, ...args);
                 },
             });
@@ -83,11 +80,8 @@
             script.domain = "www.chatbase.co";
             document.body.appendChild(script);
         };
-        if (document.readyState === "complete") {
-            onLoad();
-        } else {
-            window.addEventListener("load", onLoad);
-        }
+        if (document.readyState === "complete") onLoad();
+        else window.addEventListener("load", onLoad);
     })();
 </script>
 </body>
