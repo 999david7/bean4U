@@ -60,10 +60,7 @@ body{
             rgba(255,255,255,.10),
             rgba(0,0,0,0) 58%
             ),
-            linear-gradient(to bottom,
-            var(--bgTop),
-            var(--bgBottom)
-            ),
+            linear-gradient(to bottom, var(--bgTop), var(--bgBottom)),
             url("imgs/mcw2.png") center/cover no-repeat;
 
     z-index:-3;
@@ -162,8 +159,9 @@ body{
     text-shadow: 0 18px 60px rgba(0,0,0,.32);
 }
 
+/* FIX: clamp order (min < max) + keep it elegant on desktop */
 .slogan{
-    font-size: clamp(35px, 1.9vw, 30px);
+    font-size: clamp(18px, 1.9vw, 30px);
     font-weight: 520;
     letter-spacing: 0.03em;
 
@@ -326,7 +324,11 @@ body{
             rgba(255,255,255,.24),
             rgba(255,255,255,0) 52%
             ),
-            linear-gradient(180deg, rgba(255,214,153,.18), rgba(255,255,255,.05));
+            linear-gradient(
+                    180deg,
+                    rgba(255,214,153,.18),
+                    rgba(255,255,255,.05)
+            );
 }
 .menuHoverPill.pill-about{
     border-color: rgba(160,225,255,.40);
@@ -335,7 +337,11 @@ body{
             rgba(255,255,255,.24),
             rgba(255,255,255,0) 52%
             ),
-            linear-gradient(180deg, rgba(160,225,255,.16), rgba(255,255,255,.05));
+            linear-gradient(
+                    180deg,
+                    rgba(160,225,255,.16),
+                    rgba(255,255,255,.05)
+            );
 }
 .menuHoverPill.pill-recommendation{
     border-color: rgba(184,255,205,.40);
@@ -344,7 +350,11 @@ body{
             rgba(255,255,255,.24),
             rgba(255,255,255,0) 52%
             ),
-            linear-gradient(180deg, rgba(184,255,205,.16), rgba(255,255,255,.05));
+            linear-gradient(
+                    180deg,
+                    rgba(184,255,205,.16),
+                    rgba(255,255,255,.05)
+            );
 }
 .menuHoverPill.pill-login{
     border-color: rgba(255,180,220,.40);
@@ -353,7 +363,11 @@ body{
             rgba(255,255,255,.24),
             rgba(255,255,255,0) 52%
             ),
-            linear-gradient(180deg, rgba(255,180,220,.16), rgba(255,255,255,.05));
+            linear-gradient(
+                    180deg,
+                    rgba(255,180,220,.16),
+                    rgba(255,255,255,.05)
+            );
 }
 .menuHoverPill.pill-contact{
     border-color: rgba(210,200,255,.40);
@@ -362,7 +376,11 @@ body{
             rgba(255,255,255,.24),
             rgba(255,255,255,0) 52%
             ),
-            linear-gradient(180deg, rgba(210,200,255,.16), rgba(255,255,255,.05));
+            linear-gradient(
+                    180deg,
+                    rgba(210,200,255,.16),
+                    rgba(255,255,255,.05)
+            );
 }
 
 /* ===== Footer ===== */
@@ -383,32 +401,64 @@ body{
 
 .footerDot{ opacity:.6; }
 
-/* ===== Mobile ===== */
+/* ===== Mobile (improved) ===== */
 @media (max-width: 768px){
+    body{
+        padding:
+                max(14px, env(safe-area-inset-top))
+                max(14px, env(safe-area-inset-right))
+                max(16px, env(safe-area-inset-bottom))
+                max(14px, env(safe-area-inset-left));
+    }
+
     .page{
-        padding-top: clamp(10px, 3vh, 28px);
-        padding-bottom: clamp(10px, 5vh, 42px);
-        gap: 0px;
+        padding-top: clamp(14px, 3.2vh, 28px);
+        padding-bottom: clamp(16px, 5vh, 44px);
+        gap: 22px;
+    }
+
+    .hero{
+        gap: 14px;
     }
 
     .headline{
-        font-size: clamp(56px, 7vw, 92px);
-        line-height: 0.96;
-        padding-top: -1.5vh;
+        font-size: clamp(44px, 10.5vw, 74px);
+        line-height: 0.98;
+        padding-bottom: 1.2vh;
     }
 
+    /* Important: on mobile you want wrapping, not a single line */
     .slogan{
-        font-size: clamp(27px, 2.1vw, 26px);
+        font-size: clamp(16px, 4.7vw, 20px);
         letter-spacing: 0.02em;
-        padding-top: -1.5vh;
+        line-height: 1.22;
+        white-space: normal;
+        text-wrap: balance;
+        max-width: 22ch;
+        padding-bottom: 1.2vh;
     }
 
     .menu-container{
-        padding: 14px;
-        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 560px;
+        padding: 12px;
+        border-radius: 22px;
+
+        background:
+                linear-gradient(180deg,
+                rgba(255,255,255,.14),
+                rgba(255,255,255,.06)
+                );
+
+        border: 1px solid rgba(255,255,255,.18);
 
         backdrop-filter: blur(18px) saturate(165%);
         -webkit-backdrop-filter: blur(18px) saturate(165%);
+
+        box-shadow:
+                inset 0 1px 0 rgba(255,255,255,.22),
+                inset 0 -1px 0 rgba(0,0,0,.16),
+                0 26px 80px rgba(0,0,0,.32);
     }
 
     /* hover isn’t a thing on mobile */
@@ -424,23 +474,71 @@ body{
 
     .menu-list a{
         width:100%;
-        border-radius: var(--radius-md);
-        padding: 14px 16px;
-        min-height: 48px;
+        border-radius: 16px;
 
-        background: rgba(255,255,255,.07);
-        border: 1px solid rgba(255,255,255,.16);
+        min-height: 54px;
+        padding: 16px 16px;
+
+        font-size: 1.02rem;
+        font-weight: 700;
+
+        background:
+                radial-gradient(circle at 18% 18%,
+                rgba(255,255,255,.12),
+                rgba(255,255,255,0) 52%
+                ),
+                rgba(255,255,255,.06);
+
+        border: 1px solid rgba(255,255,255,.18);
+
         box-shadow:
-                inset 0 1px 0 rgba(255,255,255,.14),
-                0 12px 30px rgba(0,0,0,.22);
+                inset 0 1px 0 rgba(255,255,255,.16),
+                0 14px 34px rgba(0,0,0,.26);
+
+        transition:
+                transform .12s ease,
+                filter .12s ease,
+                background .18s ease,
+                border-color .18s ease;
+    }
+
+    .menu-list a:active{
+        transform: translateY(1px) scale(.99);
+        filter: brightness(1.04);
     }
 
     .footer{
         flex-direction:column;
         gap:0px;
+        font-size: .92rem;
+        padding-top: 18px;
+        opacity: .88;
     }
 
     .footerDot{ display:none; }
+}
+
+/* ===== Very small phones ===== */
+@media (max-width: 480px){
+    .headline{
+        font-size: clamp(40px, 12vw, 64px);
+    }
+
+    .slogan{
+        font-size: clamp(15px, 4.9vw, 19px);
+        max-width: 20ch;
+    }
+
+    .menu-container{
+        border-radius: 20px;
+        padding: 10px;
+    }
+
+    .menu-list a{
+        min-height: 56px;
+        padding: 16px 14px;
+        border-radius: 16px;
+    }
 }
 
 /* ===== Reduced motion ===== */
@@ -466,8 +564,7 @@ body{
     padding: 18px 18px 16px;
 
     background:
-            linear-gradient(180deg, rgba(255,255,255,.16),
-            rgba(255,255,255,.06));
+            linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
 
     border: 1px solid rgba(255,255,255,.20);
 
@@ -520,53 +617,35 @@ body{
     margin-bottom: 12px;
 }
 
-.glassLinks{
+.glassActions{
     display:flex;
     gap:10px;
+    justify-content:flex-end;
     flex-wrap:wrap;
-    margin-bottom: 14px;
-}
-
-.glassLinks a{
-    text-decoration:none;
-    padding: 10px 12px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.14);
-}
-
-.glassLinks a:hover{
-    background: rgba(255,255,255,.11);
-    border-color: rgba(255,255,255,.20);
+    margin-top: 14px;
 }
 
 .glassBtn{
-    width: 100%;
-    border: none;
+    appearance:none;
+    border:0;
     cursor:pointer;
-
-    min-height: 46px;
-    border-radius: 14px;
-
-    font-weight: 820;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 750;
     letter-spacing: .01em;
-    color: rgba(20,16,10,.96);
+    color: rgba(0,0,0,.92);
 
-    background:
-            radial-gradient(circle at 30% 20%,
-            rgba(255,255,255,.50),
-            rgba(255,255,255,0) 45%
-            ),
-            linear-gradient(135deg, #ffe29a, #ffc107, #ff8c00);
-
-    box-shadow:
-            0 22px 60px rgba(255,193,7,.22),
-            inset 0 1px 0 rgba(255,255,255,.50);
+    background: rgba(255,255,255,.90);
+    box-shadow: 0 16px 40px rgba(0,0,0,.30);
+    transition: transform .12s ease, filter .12s ease;
 }
 
 .glassBtn:hover{ filter: brightness(1.03); }
-.glassBtn:active{ filter: brightness(.99); }
-.glassBtn:focus-visible{
-    outline: 2px solid rgba(255,255,255,.7);
-    outline-offset: 4px;
+.glassBtn:active{ transform: translateY(1px) scale(.99); }
+
+.glassBtnSecondary{
+    color: rgba(255,255,255,.92);
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
 }
