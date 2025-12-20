@@ -394,11 +394,13 @@ body{
     .headline{
         font-size: clamp(56px, 7vw, 92px);
         line-height: 0.96;
+        padding-top: -1.5vh;
     }
 
     .slogan{
         font-size: clamp(16px, 2.1vw, 26px);
         letter-spacing: 0.02em;
+        padding-top: -1.5vh;
     }
 
     .menu-container{
