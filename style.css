@@ -388,7 +388,7 @@ body{
     .page{
         padding-top: clamp(10px, 3vh, 28px);
         padding-bottom: clamp(10px, 5vh, 42px);
-        gap: 18px;
+        gap: 0px;
     }
 
     .headline{
