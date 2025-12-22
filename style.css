@@ -422,7 +422,7 @@ body{
     }
 
     .headline{
-        font-size: clamp(44px, 10.5vw, 74px);
+        font-size: clamp(60px, 10.5vw, 74px);
         line-height: 0.98;
         padding-bottom: 1.2vh;
     }
@@ -521,7 +521,7 @@ body{
 /* ===== Very small phones ===== */
 @media (max-width: 480px){
     .headline{
-        font-size: clamp(40px, 12vw, 64px);
+        font-size: clamp(60px, 12vw, 64px);
     }
 
     .slogan{

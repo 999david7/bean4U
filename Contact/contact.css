@@ -9,6 +9,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
+    bckground-color: #1f1f1f;
     background: url("../imgs/contact imgs/6FA2279C-F9DD-4F6D-9079-610B097BA06E.PNG")
     no-repeat center center / cover;
     color: var(--text-main);
