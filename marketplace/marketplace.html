@@ -1,28 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Coffee Recipes</title>
-  <link rel="stylesheet" href="marketplace.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Coffee Marketplace</title>
+    <link rel="stylesheet" href="marketplace.css" />
 </head>
-<script src="/script.js"></script>
 
 <body>
-  <div class="container">
-    <input type="text" id="searchInput" placeholder="Kaffee suchen..." />
-    <ul id="coffeeList"></ul>
-  </div>
+<!-- Floating Home Button -->
+<button id="homeBtn" class="glass-btn" title="Back to Home" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+</button>
 
-  <!-- Place this right inside <body>, e.g. at the top of your page -->
-<div id="homeBtn" class="glass-btn" title="Back to Home">
-  <!-- A small house‑icon (inline SVG) – no external libraries needed -->
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-  </svg>
-</div>
+<main class="page">
+    <header class="header glass">
+        <div class="headerText">
+            <p class="kicker">Marketplace</p>
+            <h1>Coffee Recipes & Beans</h1>
+            <p class="sub">
+                Clean cards, real images, and direct buy links. Search and tap.
+            </p>
+        </div>
 
+        <div class="searchWrap">
+            <label class="srOnly" for="searchInput">Search coffee</label>
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search coffee… (e.g. Ethiopia, Geisha, Italian)"
+                    autocomplete="off"
+            />
+        </div>
+    </header>
 
-  <script src="marketplace.js"></script>
+    <section class="gridWrap">
+        <ul id="coffeeList" class="grid" aria-label="Coffee list"></ul>
+    </section>
+
+    <footer class="footer">
+        <p>Tip: Add more coffees in <code>marketplace.js</code>.</p>
+    </footer>
+</main>
+
+<script src="marketplace.js"></script>
 </body>
 </html>

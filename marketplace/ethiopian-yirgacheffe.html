@@ -1,32 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ethiopian Yirgacheffe Recipe</title>
-  <link rel="stylesheet" href="marketplace.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Ethiopian Yirgacheffe</title>
+    <link rel="stylesheet" href="../marketplace/marketplace.css" />
 </head>
 <body>
-  <div class="bg-art"></div>
+<button id="homeBtn" class="glass-btn" title="Back to Home" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+</button>
 
-  <div class="container glass single-recipe">
-    <h1>Ethiopian Yirgacheffe</h1>
-    
-    <div class="recipe-content">
-      <img src="../imgs/product imgs/yirgacheffe-1-1159x2048.png.webp" alt="Ethiopian Yirgacheffe" class="recipe-image" />
-        <h5> store:coffeeworld
-            <a href="https://coffeeworld.co.uk/product/coffee/single-origin/ethiopia-yirgacheffe/"> Channel</a>
-        </h5>
-      </div>
-    </div>
+<main class="page">
+    <section class="detail glass">
+        <div class="detailTop">
+            <div class="detailImage">
+                <img
+                        src="../imgs/product imgs/yirgacheffe-1-1159x2048.png.webp"
+                        alt="Ethiopian Yirgacheffe"
+                />
+            </div>
 
-    <button id="backBtn" class="glass btn-back">← Back to All Recipes</button>
-  </div>
+            <div class="detailInfo">
+                <p class="kicker">Single Origin</p>
+                <h1 class="detailTitle">Ethiopian Yirgacheffe</h1>
+                <p class="detailSub">
+                    Bright, floral, citrus-forward. Clean finish.
+                </p>
 
-  <script>
-    document.getElementById('backBtn').addEventListener('click', () => {
-      window.location.href = 'marketplace.html';
+                <div class="tagRow">
+                    <span class="tag">floral</span>
+                    <span class="tag">citrus</span>
+                    <span class="tag">ethiopia</span>
+                </div>
+
+                <div class="detailActions">
+                    <a
+                            class="btn btnPrimary"
+                            href="https://coffeeworld.co.uk/product/coffee/single-origin/ethiopia-yirgacheffe/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                    >
+                        Buy on coffeeworld
+                    </a>
+
+                    <button id="backBtn" class="btn btnGhost" type="button">
+                        ← Back to all coffees
+                    </button>
+                </div>
+
+                <p class="detailMeta">
+                    Store: <strong>coffeeworld</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="detailBottom">
+            <h2>Recipe notes</h2>
+            <p>
+                If you want this page to be a real “recipe”, add grind size, ratio,
+                brew time, and temperature here.
+            </p>
+        </div>
+    </section>
+</main>
+
+<script>
+    document.getElementById("backBtn").addEventListener("click", () => {
+        window.location.href = "marketplace.html";
     });
-  </script>
+
+    document.getElementById("homeBtn").addEventListener("click", () => {
+        window.location.href = "../index.html";
+    });
+</script>
+
+<style>
+    /* Page-specific detail layout (kept minimal, reuses marketplace.css) */
+    .detail {
+        border-radius: 22px;
+        overflow: hidden;
+        padding: 16px;
+    }
+
+    .detailTop {
+        display: grid;
+        gap: 14px;
+    }
+
+    .detailImage {
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .detailImage img {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .detailTitle {
+        font-size: 28px;
+        line-height: 1.1;
+        margin-top: 6px;
+    }
+
+    .detailSub {
+        color: rgba(255, 255, 255, 0.68);
+        margin-top: 8px;
+        line-height: 1.35;
+    }
+
+    .detailActions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    .detailMeta {
+        margin-top: 10px;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 13px;
+    }
+
+    .detailBottom {
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.78);
+    }
+
+    .detailBottom h2 {
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    @media (min-width: 860px) {
+        .detail {
+            padding: 18px;
+        }
+
+        .detailTop {
+            grid-template-columns: 1.05fr 0.95fr;
+            align-items: start;
+            gap: 18px;
+        }
+
+        .detailImage img {
+            height: 420px;
+        }
+
+        .detailActions {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .detailTitle {
+            font-size: 34px;
+        }
+    }
+</style>
 </body>
 </html>

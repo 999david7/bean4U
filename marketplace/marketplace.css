@@ -1,124 +1,319 @@
+/* ============================================================
+   Marketplace – Clean Glass UI
+   ============================================================ */
+
 /* Reset */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg0: #0b0b0d;
+    --bg1: #0f1115;
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.68);
+    --line: rgba(255, 255, 255, 0.14);
+    --glass: rgba(255, 255, 255, 0.08);
+    --glassStrong: rgba(255, 255, 255, 0.12);
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(100deg, #969696, #b48d68);
-  min-height: 100vh;
-  padding: 2rem;
-  color: white;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    background:
+            radial-gradient(1200px 700px at 20% 10%, rgba(255, 255, 255, 0.10), transparent 60%),
+            radial-gradient(900px 500px at 80% 30%, rgba(180, 141, 104, 0.28), transparent 55%),
+            linear-gradient(160deg, var(--bg0), var(--bg1));
+    padding: 28px 18px 40px;
 }
 
-/* Container */
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
+.page {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-/* Suchfeld */
+/* Glass surface */
+.glass {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: var(--shadow);
+}
+
+/* Header */
+.header {
+    border-radius: 22px;
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+}
+
+.headerText {
+    display: grid;
+    gap: 8px;
+}
+
+.kicker {
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.header h1 {
+    font-size: 28px;
+    line-height: 1.1;
+}
+
+.sub {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.35;
+    max-width: 60ch;
+}
+
+.searchWrap {
+    display: grid;
+    gap: 8px;
+}
+
 #searchInput {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  margin-bottom: 2rem;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  background: rgba(255, 255, 255, 0.356);
-  color: rgb(236, 186, 119);
-  backdrop-filter: blur(5px);
+    width: 100%;
+    padding: 14px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    font-size: 14px;
+    background: var(--glassStrong);
+    color: var(--text);
+    outline: none;
+}
+
+#searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+#searchInput:focus {
+    border-color: rgba(255, 255, 255, 0.28);
 }
 
 /* Grid */
-#coffeeList {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
-  padding: 0;
+.gridWrap {
+    margin-top: 16px;
 }
 
-/* Glassbox mit Bild + Name */
-.coffee-box {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 1rem;
-  text-align: center;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: transform 0.2s ease;
-  cursor: pointer;
+.grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 14px;
 }
 
-.coffee-box:hover {
-  transform: scale(1.03);
+/* Card */
+.card {
+    border-radius: 22px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
-.coffee-box img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 15px;
-  margin-bottom: 0.8rem;
+.card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.22);
 }
 
-.coffee-box h3 {
-  font-size: 1.1rem;
-  margin: 0;
-  color: rgb(223, 191, 161);
+.cardImage {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
 }
 
-img{
-  min-width:100px;
-  max-width:500px;
-  min-height: auto;
-  max-height: 350px;
-  }
+.cardImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+}
 
-  /* ---------- Liquid‑Glass Home Button ---------- */
+.cardBody {
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.cardTitle {
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.cardMeta {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.tagRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+/* Actions */
+.cardActions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.14s ease, background 0.14s ease, opacity 0.14s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btnPrimary {
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--text);
+}
+
+.btnPrimary:hover {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.btnGhost {
+    background: rgba(0, 0, 0, 0.12);
+    color: var(--text);
+}
+
+.btnGhost:hover {
+    background: rgba(0, 0, 0, 0.20);
+}
+
+.isDisabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Empty state */
+.empty {
+    border-radius: 22px;
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.empty h3 {
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+/* Footer */
+.footer {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+}
+
+.footer code {
+    color: rgba(255, 255, 255, 0.86);
+}
+
+/* Accessibility */
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* ---------- Floating Home Button ---------- */
 .glass-btn {
-  position: fixed;               /* stay on screen */
-  top: 1rem;                     /* 16px from top */
-  left: 1rem;                    /* 16px from left */
-  width: 48px;                   /* 3rem */
-  height: 48px;                  /* 3rem */
-  border-radius: 12px;           /* rounded corners */
-  background: rgba(255, 255, 255, 0.12); /* translucent white */
-  backdrop-filter: blur(12px);   /* glassy blur */
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, transform 0.2s;
-  z-index: 1000;                 /* above everything else */
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform 0.18s ease, background 0.18s ease;
+    z-index: 1000;
 }
 
-/* Hover / active effects */
 .glass-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
-  transform: translateY(-2px);
-}
-.glass-btn:active {
-  transform: translateY(0);
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
 }
 
-/* Icon size */
 .glass-btn svg {
-  width: 24px;
-  height: 24px;
-  fill: #fff;            /* white house icon */
+    width: 22px;
+    height: 22px;
+    fill: #fff;
 }
 
-/* Optional dark‑mode tweak – use CSS vars if you already have them */
-@media (prefers-color-scheme: dark) {
-  .glass-btn {
-    background: rgba(0, 0, 0, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .glass-btn svg { fill: #fff; }
+/* Desktop layout */
+@media (min-width: 760px) {
+    body {
+        padding: 34px 22px 50px;
+    }
+
+    .header {
+        padding: 22px;
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: end;
+        gap: 18px;
+    }
+
+    .header h1 {
+        font-size: 34px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .cardImage {
+        height: 170px;
+    }
 }
