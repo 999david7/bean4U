@@ -1,30 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Coffee Recipes</title>
-  <link rel="stylesheet" href="Rezepte2.css" />
+    <meta charset="UTF-8" />
+    <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <title>Coffee Recipes</title>
+
+    <link rel="stylesheet" href="Rezepte2.css" />
 </head>
-<script src="/script.js"></script>
 
 <body>
-  <div class="container">
-    <input type="text" id="searchInput" placeholder="Kaffee suchen..." />
-    <ul id="coffeeList"></ul>
-  </div>
+<div class="bg-cover" aria-hidden="true"></div>
 
-  <!-- Place this right inside <body>, e.g. at the top of your page -->
-<div id="homeBtn" class="glass-btn" title="Back to Home">
-  <!-- A small house‑icon (inline SVG) – no external libraries needed -->
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-  </svg>
+<div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
 </div>
 
+<div class="noise" aria-hidden="true"></div>
 
-  <script src="Rezepte2.js"></script>
+<!-- Home button -->
+<button id="homeBtn" class="homeBtn" type="button" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </svg>
+</button>
 
+<main class="page">
+    <header class="header">
+        <div class="titleBlock">
+            <h1 class="title">Recipes</h1>
+            <p class="subtitle">Pick a coffee. Get the recipe.</p>
+        </div>
 
+        <!-- Icon -> fold-out search (filters list) -->
+        <div class="searchDock" id="searchDock">
+            <button
+                    class="searchIconBtn"
+                    id="searchToggle"
+                    type="button"
+                    aria-label="Search recipes"
+                    aria-expanded="false"
+            >
+                <svg
+                        class="searchIcon"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        focusable="false"
+                >
+                    <path
+                            d="M10.5 18a7.5 7.5 0 1 1 0-15a7.5 7.5 0 0 1 0 15Zm6.2-1.3l3.2 3.2"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                    />
+                </svg>
+            </button>
+
+            <form class="searchForm" id="recipeSearch" autocomplete="off">
+                <label class="srOnly" for="searchInput">Search</label>
+                <input
+                        type="search"
+                        id="searchInput"
+                        class="searchInput"
+                        placeholder="Search coffee…"
+                />
+            </form>
+        </div>
+    </header>
+
+    <section class="content">
+        <ul id="coffeeList" class="coffeeList" aria-label="Coffee list"></ul>
+    </section>
+
+    <footer class="footer">
+        <span>© <span id="year"></span> bean4U</span>
+        <span class="footerDot">•</span>
+        <span>Dark roast. Smooth UI.</span>
+    </footer>
+</main>
+
+<script src="Rezepte2.js"></script>
 </body>
 </html>
