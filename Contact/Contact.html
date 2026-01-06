@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
     <title>Contact Us | bean4U</title>
 
     <!-- Bootstrap 5 -->
@@ -13,7 +17,7 @@
 
     <!-- Google Font -->
     <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
     />
 
@@ -22,8 +26,26 @@
 </head>
 
 <body>
+<div class="bg-cover" aria-hidden="true"></div>
 
-<main class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+<div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+</div>
+
+<div class="noise" aria-hidden="true"></div>
+
+<!-- Home button -->
+<a class="homeBtn" href="../index.html" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </svg>
+</a>
+
+<main
+        class="container min-vh-100 d-flex align-items-center justify-content-center py-5"
+>
     <section class="card-glass w-100">
         <h1 class="mb-2">☕ Get in touch</h1>
 
@@ -33,7 +55,6 @@
         </p>
 
         <form action="/your-endpoint" method="POST" class="contact-form">
-
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
@@ -44,6 +65,7 @@
                             class="form-control"
                             placeholder="John Doe"
                             required
+                            autocomplete="name"
                     />
                 </div>
 
@@ -56,6 +78,7 @@
                             class="form-control"
                             placeholder="john@email.com"
                             required
+                            autocomplete="email"
                     />
                 </div>
             </div>
@@ -68,6 +91,7 @@
                         type="text"
                         class="form-control"
                         placeholder="What's on your mind?"
+                        autocomplete="off"
                 />
             </div>
 
@@ -89,6 +113,9 @@
                 </button>
             </div>
 
+            <p class="text-center mt-4 mb-0 tinyFooter">
+                © <span id="year"></span> bean4U
+            </p>
         </form>
     </section>
 </main>
@@ -96,35 +123,44 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Global Script -->
-<script src="../Contact/contact.js"></script>
+<!-- Page Script -->
+<script src="contact.js"></script>
 
 <!-- Chatbase -->
 <script>
-    (function(){
-        if(!window.chatbase||window.chatbase("getState")!=="initialized"){
-            window.chatbase=(...arguments)=>{
-                if(!window.chatbase.q){window.chatbase.q=[]}
-                window.chatbase.q.push(arguments)
-            };
-            window.chatbase=new Proxy(window.chatbase,{
-                get(target,prop){
-                    if(prop==="q"){return target.q}
-                    return(...args)=>target(prop,...args)
+    (function () {
+        if (
+            !window.chatbase ||
+            window.chatbase("getState") !== "initialized"
+        ) {
+            window.chatbase = (...arguments) => {
+                if (!window.chatbase.q) {
+                    window.chatbase.q = [];
                 }
-            })
+                window.chatbase.q.push(arguments);
+            };
+            window.chatbase = new Proxy(window.chatbase, {
+                get(target, prop) {
+                    if (prop === "q") {
+                        return target.q;
+                    }
+                    return (...args) => target(prop, ...args);
+                },
+            });
         }
-        const onLoad=function(){
-            const script=document.createElement("script");
-            script.src="https://www.chatbase.co/embed.min.js";
-            script.id="N666eT2Bupz8nsHBiiJux";
-            script.domain="www.chatbase.co";
-            document.body.appendChild(script)
+        const onLoad = function () {
+            const script = document.createElement("script");
+            script.src = "https://www.chatbase.co/embed.min.js";
+            script.id = "N666eT2Bupz8nsHBiiJux";
+            script.domain = "www.chatbase.co";
+            document.body.appendChild(script);
         };
-        if(document.readyState==="complete"){onLoad()}
-        else{window.addEventListener("load",onLoad)}
+        if (document.readyState === "complete") {
+            onLoad();
+        } else {
+            window.addEventListener("load", onLoad);
+        }
     })();
 </script>
-
 </body>
 </html>

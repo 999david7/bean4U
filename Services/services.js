@@ -1,21 +1,58 @@
-// --- SERVER CODE ---
-const jwt = require('jsonwebtoken');
+/* ============================================================
+   Services page
+   - Opens quiz modal from any .openQuiz button
+   - Handles quiz submit + result rendering
+   - Sets footer year
+   ============================================================ */
 
-const secret = '69rke65z328mmuw7bjjk3f92afz599ap'; // Your chatbase secret key (should be stored as a secret not in the code)
+(function () {
+    "use strict";
 
-const user = await getSignedInUser(); // Get the current user signed in to your site
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-const token = jwt.sign(
-    { 
-        user_id: user.id, // Your user's id
-        email: "winklerdavid815@gmail.com", // User's email
-        stripe_accounts: user.stripe_accounts, // User's stripe accounts for stripe integration
-        // ... other custom attributes
-    }, 
-    secret, 
-    { expiresIn: '1h' }
-);
+    const modalEl = document.getElementById("quizModal");
+    const quizForm = document.getElementById("quizForm");
+    const quizResult = document.getElementById("quizResult");
+    const resultText = document.getElementById("resultText");
 
-// --- CLIENT CODE ---
-const token = await getUserToken(); // Get the token from your server
-window.chatbase('identify', { token }); // identify the user with Chatbase
+    if (!modalEl || !quizForm || !quizResult || !resultText) return;
+
+    const quizModal = new bootstrap.Modal(modalEl);
+
+    document.querySelectorAll(".openQuiz").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            quizModal.show();
+        });
+    });
+
+    quizForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const d = new FormData(quizForm);
+
+        let r =
+            "Explore our premium selection – Kenyan AA or Panama Geisha.";
+
+        if (d.get("q1") === "light" && d.get("q2") === "complex" && d.get("q4") === "yes") {
+            r = "Try an Ethiopian Yirgacheffe – bright, floral and citrusy.";
+        } else if (d.get("q1") === "medium" && d.get("q3") === "drip") {
+            r = "Colombian medium roast – balanced and chocolatey.";
+        } else if (d.get("q1") === "dark" && d.get("q3") === "espresso") {
+            r = "Italian-style dark roast – bold and rich.";
+        } else if (d.get("q3") === "coldbrew") {
+            r = "Brazilian beans – smooth and low-acid.";
+        } else if (d.get("q5") === "budget") {
+            r = "Central American blend – affordable and reliable.";
+        }
+
+        resultText.textContent = r;
+        quizResult.style.display = "block";
+
+        quizResult.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+        });
+    });
+})();
