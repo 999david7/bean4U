@@ -1,21 +1,77 @@
 /* ============================================================
-   bean4U – UI
+   bean4U – Premium UI
    - Footer year
-   - Consent overlay (auto, once)
-   - Pill: smooth, lightly snaps to hovered button,
-           follows mouse X, only visible on buttons,
-           resizes + recolors per button
+   - Fold-out search icon (click to expand, ESC/click-out to close)
+   - Recipe query forwarded via localStorage
+   - Hover pill: NEVER disappears between buttons; snaps to nearest
+   - Consent overlay (once), skipped on legal pages
    ============================================================ */
 
-(function(){
+(function () {
     "use strict";
 
-    // ===== Year in footer
+    // ===== Footer year
     const yearEl = document.getElementById("year");
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-    // ===== Consent Overlay (Liquid Glass)
+    // ===== Fold-out search
+    const searchDock = document.getElementById("searchDock");
+    const searchToggle = document.getElementById("searchToggle");
+    const searchForm = document.getElementById("recipeSearch");
+    const searchInput = document.getElementById("recipeQuery");
+
+    const setSearchOpen = (isOpen) => {
+        if (!searchDock || !searchToggle || !searchInput) return;
+
+        searchDock.classList.toggle("open", isOpen);
+        searchToggle.setAttribute("aria-expanded", String(isOpen));
+
+        if (isOpen) {
+            window.setTimeout(() => searchInput.focus(), 40);
+        } else {
+            searchInput.value = "";
+        }
+    };
+
+    if (searchToggle && searchDock) {
+        searchToggle.addEventListener("click", () => {
+            const isOpen = searchDock.classList.contains("open");
+            setSearchOpen(!isOpen);
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Escape") return;
+            if (searchDock.classList.contains("open")) setSearchOpen(false);
+        });
+
+        document.addEventListener("pointerdown", (e) => {
+            if (!searchDock.classList.contains("open")) return;
+            if (searchDock.contains(e.target)) return;
+            setSearchOpen(false);
+        });
+    }
+
+    if (searchForm && searchInput) {
+        searchForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const q = (searchInput.value || "").trim();
+            if (q) localStorage.setItem("bean4u_recipe_query", q);
+
+            window.location.href = "Rezepte (2)/Rezepte2.html";
+        });
+
+        searchInput.addEventListener("keydown", (e) => {
+            if (e.key !== "Enter") return;
+            // Let form submit handler handle it
+        });
+    }
+
+    // ===== Consent overlay (once)
     document.addEventListener("DOMContentLoaded", () => {
+        const path = (window.location.pathname || "").toLowerCase();
+        const isLegal = path.endsWith("/terms.html") || path.endsWith("/privacy.html");
+        if (isLegal) return;
+
         const key = "beans4u_terms_agreed";
         if (localStorage.getItem(key)) return;
 
@@ -26,23 +82,14 @@
 
         overlay.innerHTML = `
       <div class="glassModal" role="document">
-        <div class="glassModalTop">
-          <div class="glassPill">
-            <span class="glassDot" aria-hidden="true"></span>
-            <span>bean4U</span>
-          </div>
-        </div>
-
         <h2 class="glassTitle">Terms & Privacy</h2>
         <p class="glassText">
           To use this site, you need to accept our Terms and Privacy Policy.
         </p>
-
         <div class="glassLinks">
           <a href="terms.html">Read Terms</a>
           <a href="privacy.html">Read Privacy</a>
         </div>
-
         <button class="glassBtn" type="button">Accept</button>
       </div>
     `;
@@ -56,157 +103,154 @@
         });
     });
 
-    // ===== Smooth snapping pill
+    // ===== Hover pill (premium + no gap-stall)
+    const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    if (prefersReducedMotion || isCoarsePointer) return;
+
     const menuContainer = document.querySelector(".menu-container");
-    const menuList = document.querySelector(".menu-list");
     const pill = document.querySelector(".menuHoverPill");
+    const links = Array.from(document.querySelectorAll(".menu-list a"));
 
-    if (!menuContainer || !menuList || !pill) return;
-
-    const pillColorClasses = [
-        "pill-recipes",
-        "pill-about",
-        "pill-recommendation",
-        "pill-login",
-        "pill-contact"
-    ];
-
-    const clearPillColors = () => {
-        pillColorClasses.forEach((c) => pill.classList.remove(c));
-    };
+    if (!menuContainer || !pill || links.length === 0) return;
 
     const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-    // Current state (animated)
+    // Spring state
     let x = 0;
     let y = 0;
     let w = 110;
     let h = 40;
 
-    // Velocity for spring
     let vx = 0;
     let vy = 0;
     let vw = 0;
     let vh = 0;
 
-    // Targets
     let tx = 0;
     let ty = 0;
     let tw = 110;
     let th = 40;
 
     let isInside = false;
-    let isOnLink = false;
     let lastMouseX = 0;
 
-    // Tuning (professional feel)
-    // Higher stiffness = snappier, higher damping = less bounce.
-    const stiffness = 0.10;
-    const damping = 0.5;
+    // Tuned for "Apple" smooth (no jitter, no dead stops)
+    const posStiff = 0.11;
+    const posDamp = 0.52;
 
-    const sizeStiffness = 0.12;
-    const sizeDamping = 0.49;
+    const sizeStiff = 0.13;
+    const sizeDamp = 0.50;
 
-    const getRowCenterY = () => {
+    const getRects = () => {
         const cRect = menuContainer.getBoundingClientRect();
-        const listRect = menuList.getBoundingClientRect();
-        return (listRect.top - cRect.top) + (listRect.height / 2);
+        const lRects = links.map((a) => a.getBoundingClientRect());
+        return { cRect, lRects };
     };
 
-    const setTargetsFromLink = (link) => {
-        const cRect = menuContainer.getBoundingClientRect();
-        const lRect = link.getBoundingClientRect();
+    let cached = getRects();
 
-        tw = lRect.width;
-        th = lRect.height;
+    const findNearestLinkIndex = (mouseClientX) => {
+        let bestIdx = 0;
+        let bestDist = Number.POSITIVE_INFINITY;
 
-        // Lock Y to the link row (stable)
-        const top = (lRect.top - cRect.top);
+        for (let i = 0; i < cached.lRects.length; i += 1) {
+            const r = cached.lRects[i];
+            const centerX = r.left + r.width / 2;
+            const d = Math.abs(mouseClientX - centerX);
+            if (d < bestDist) {
+                bestDist = d;
+                bestIdx = i;
+            }
+        }
+
+        return bestIdx;
+    };
+
+    const applyTargetFromIndex = (idx) => {
+        const cRect = cached.cRect;
+        const r = cached.lRects[idx];
+        const link = links[idx];
+
+        tw = r.width;
+        th = r.height;
+
+        const top = r.top - cRect.top;
         ty = clamp(top, 6, cRect.height - th - 6);
 
-        // “Lightly snap”: blend mouse-follow X with button center X
+        const centerLeft = r.left - cRect.left;
         const mouseX = lastMouseX - cRect.left;
-        const mouseLeft = mouseX - (tw / 2);
 
-        const linkLeft = (lRect.left - cRect.left);
-        // This makes it feel like it still follows you, but magnetizes to the link
-        const snapStrength = 0.72; // 0..1 (higher = more snap)
-        tx = (mouseLeft * (1 - snapStrength)) + (linkLeft * snapStrength);
-
+        // Strong snap to the real button, slight bias from cursor
+        const mouseLeft = mouseX - tw / 2;
+        const snap = 0.82;
+        tx = mouseLeft * (1 - snap) + centerLeft * snap;
         tx = clamp(tx, 6, cRect.width - tw - 6);
 
-        // Color per button
+        // Subtle tint by section (via dataset), without extra classes
         const key = link.getAttribute("data-pill") || "";
-        clearPillColors();
-        if (key) pill.classList.add(`pill-${key}`);
-    };
-
-    const hidePill = () => {
-        pill.style.opacity = "0";
-        clearPillColors();
-        isOnLink = false;
+        pill.setAttribute("data-pill", key);
     };
 
     const showPill = () => {
         pill.style.opacity = "1";
     };
 
+    const hidePill = () => {
+        pill.style.opacity = "0";
+        pill.setAttribute("data-pill", "");
+    };
+
     const tick = () => {
         if (!isInside) return;
 
-        // Spring for position
-        const ax = (tx - x) * stiffness;
-        const ay = (ty - y) * stiffness;
+        const ax = (tx - x) * posStiff;
+        const ay = (ty - y) * posStiff;
 
-        vx = (vx + ax) * damping;
-        vy = (vy + ay) * damping;
+        vx = (vx + ax) * posDamp;
+        vy = (vy + ay) * posDamp;
 
         x += vx;
         y += vy;
 
-        // Spring for size
-        const aw = (tw - w) * sizeStiffness;
-        const ah = (th - h) * sizeStiffness;
+        const aw = (tw - w) * sizeStiff;
+        const ah = (th - h) * sizeStiff;
 
-        vw = (vw + aw) * sizeDamping;
-        vh = (vh + ah) * sizeDamping;
+        vw = (vw + aw) * sizeDamp;
+        vh = (vh + ah) * sizeDamp;
 
         w += vw;
         h += vh;
 
         pill.style.width = `${w.toFixed(1)}px`;
         pill.style.height = `${h.toFixed(1)}px`;
-        pill.style.transform =
-            `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+        pill.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px,0)`;
 
         requestAnimationFrame(tick);
     };
 
     const onEnter = (e) => {
         isInside = true;
+        cached = getRects();
         lastMouseX = e.clientX;
 
-        // initialize to avoid jump
-        const cRect = menuContainer.getBoundingClientRect();
-        const centerY = getRowCenterY();
+        const idx = findNearestLinkIndex(lastMouseX);
+        applyTargetFromIndex(idx);
 
-        // Start hidden until you’re on a link
-        hidePill();
+        x = tx;
+        y = ty;
+        w = tw;
+        h = th;
 
-        // Put it somewhere sane internally (doesn’t matter much if hidden)
-        tw = parseFloat(getComputedStyle(document.documentElement)
-            .getPropertyValue("--pill-default-w")) || 110;
-        th = parseFloat(getComputedStyle(document.documentElement)
-            .getPropertyValue("--pill-default-h")) || 40;
+        vx = 0;
+        vy = 0;
+        vw = 0;
+        vh = 0;
 
-        tx = clamp((lastMouseX - cRect.left) - (tw / 2),
-            6, cRect.width - tw - 6);
-        ty = clamp(centerY - (th / 2),
-            6, cRect.height - th - 6);
-
-        x = tx; y = ty; w = tw; h = th;
-        vx = vy = vw = vh = 0;
-
+        showPill();
         requestAnimationFrame(tick);
     };
 
@@ -215,56 +259,57 @@
         hidePill();
     };
 
+    // rAF-throttled pointer tracking (clean motion)
+    let rafPending = false;
+
     const onMove = (e) => {
         if (!isInside) return;
-
         lastMouseX = e.clientX;
 
-        const link = e.target.closest(".menu-list a");
-        if (!link) {
-            // Only visible on buttons -> hide immediately
-            hidePill();
-            return;
-        }
+        if (rafPending) return;
+        rafPending = true;
 
-        // On a link -> show + snap targets
-        isOnLink = true;
-        showPill();
-        setTargetsFromLink(link);
+        requestAnimationFrame(() => {
+            rafPending = false;
+            cached = getRects();
+
+            const idx = findNearestLinkIndex(lastMouseX);
+            applyTargetFromIndex(idx);
+            showPill();
+        });
     };
 
     menuContainer.addEventListener("mouseenter", onEnter);
     menuContainer.addEventListener("mouseleave", onLeave);
     menuContainer.addEventListener("mousemove", onMove);
 
-    // Keyboard support: show pill on focused link
+    // Keyboard focus: pill follows focused item
     menuContainer.addEventListener("focusin", (e) => {
         const link = e.target.closest(".menu-list a");
         if (!link) return;
 
         isInside = true;
-        isOnLink = true;
+        cached = getRects();
+
+        const rect = link.getBoundingClientRect();
+        lastMouseX = rect.left + rect.width / 2;
+
+        const idx = links.indexOf(link);
+        if (idx >= 0) applyTargetFromIndex(idx);
+
         showPill();
-
-        // Fake mouse position to the link center
-        const lRect = link.getBoundingClientRect();
-        lastMouseX = lRect.left + (lRect.width / 2);
-
-        setTargetsFromLink(link);
         requestAnimationFrame(tick);
     });
 
     menuContainer.addEventListener("focusout", () => {
-        // If mouse isn't inside and no focus, hide
         if (!menuContainer.matches(":hover")) hidePill();
     });
 
     window.addEventListener("resize", () => {
-        if (!isInside || !isOnLink) return;
-        // Re-evaluate Y lock and clamps
-        // Next mouse move will re-target anyway; this prevents weird offset.
-        const link = document.querySelector(".menu-list a:hover");
-        if (link) setTargetsFromLink(link);
-    });
+        if (!isInside) return;
+        cached = getRects();
 
+        const idx = findNearestLinkIndex(lastMouseX);
+        applyTargetFromIndex(idx);
+    });
 })();

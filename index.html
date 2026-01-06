@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta
             name="viewport"
-            content="width=device-width, initial-scale=1, viewport-fit=cover"
+            content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
+    <meta name="color-scheme" content="dark" />
     <title>bean4U</title>
 
     <link rel="stylesheet" href="style.css" />
@@ -20,11 +21,6 @@
     </style>
 </head>
 
-<a href="marketplace/marketplace.html" class="get-bean-btn">
-    ☕ Get your bean
-</a>
-
-
 <body>
 <div class="bg-cover" aria-hidden="true"></div>
 
@@ -36,18 +32,66 @@
 
 <div class="noise" aria-hidden="true"></div>
 
+<a href="marketplace/marketplace.html" class="get-bean-btn">
+    ☕ Get your bean
+</a>
+
 <main class="page">
     <header class="hero">
-        <h1 class="headline">bean4U</h1>
-        <p class="slogan">your coffee your choice</p>
+        <div class="heroTop">
+            <h1 class="headline">bean4U</h1>
+            <p class="slogan">your coffee your choice</p>
+        </div>
+
+        <!-- Icon -> fold-out search -->
+        <div class="searchDock" id="searchDock">
+            <button
+                    class="searchIconBtn"
+                    id="searchToggle"
+                    type="button"
+                    aria-label="Search recipes"
+                    aria-expanded="false"
+            >
+                <svg
+                        class="searchIcon"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        focusable="false"
+                >
+                    <path
+                            d="M10.5 18a7.5 7.5 0 1 1 0-15a7.5 7.5 0 0 1 0 15Zm6.2-1.3l3.2 3.2"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                    />
+                </svg>
+            </button>
+
+            <form class="searchForm" id="recipeSearch" autocomplete="off">
+                <label class="srOnly" for="recipeQuery">Search recipes</label>
+                <input
+                        id="recipeQuery"
+                        class="searchInput"
+                        type="search"
+                        placeholder="Search recipes…"
+                />
+            </form>
+        </div>
 
         <nav class="menu-container" aria-label="Primary">
             <span class="menuHoverPill" aria-hidden="true"></span>
 
             <ul class="menu-list">
-                <li><a href="Rezepte (2)/Rezepte2.html" data-pill="recipes">Recipes</a></li>
+                <li>
+                    <a href="Rezepte (2)/Rezepte2.html" data-pill="recipes">Recipes</a>
+                </li>
                 <li><a href="About/About.html" data-pill="about">About</a></li>
-                <li><a href="Services/Services.html" data-pill="recommendation">Our recommendation</a></li>
+                <li>
+                    <a href="Services/Services.html" data-pill="recommendation">
+                        Our recommendation
+                    </a>
+                </li>
                 <li><a href="Log in/Log in.html" data-pill="login">Log in</a></li>
                 <li><a href="Contact/Contact.html" data-pill="contact">Contact</a></li>
             </ul>
@@ -57,7 +101,7 @@
     <footer class="footer">
         <span>© <span id="year"></span> bean4U</span>
         <span class="footerDot">•</span>
-        <span>Made to feel like glass.</span>
+        <span>Dark roast. Smooth UI.</span>
     </footer>
 </main>
 
