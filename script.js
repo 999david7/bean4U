@@ -5,7 +5,7 @@
    - Recipe query forwarded via localStorage
    - Hover pill: NEVER disappears between buttons; snaps to nearest
    - Consent overlay (once), skipped on legal pages
-   - Disagree => black site lock
+   - Disagree => black site lock (Reload clears denial + gives new chance)
    ============================================================ */
 
 (function () {
@@ -60,11 +60,6 @@
 
             window.location.href = "Rezepte (2)/Rezepte2.html";
         });
-
-        searchInput.addEventListener("keydown", (e) => {
-            if (e.key !== "Enter") return;
-            // Let form submit handler handle it
-        });
     }
 
     // ===== Consent overlay + Blackout lock
@@ -108,7 +103,11 @@
             document.body.appendChild(blackout);
 
             const reloadBtn = blackout.querySelector("button");
-            reloadBtn.addEventListener("click", () => window.location.reload());
+            reloadBtn.addEventListener("click", () => {
+                // IMPORTANT: remove denial so reload gives a fresh chance to accept
+                localStorage.removeItem(consentKey);
+                window.location.reload();
+            });
         };
 
         // If denied: lock the site, but do NOT lock legal pages
