@@ -5,6 +5,7 @@
    - Recipe query forwarded via localStorage
    - Hover pill: NEVER disappears between buttons; snaps to nearest
    - Consent overlay (once), skipped on legal pages
+   - Disagree => black site lock
    ============================================================ */
 
 (function () {
@@ -66,14 +67,61 @@
         });
     }
 
-    // ===== Consent overlay (once)
+    // ===== Consent overlay + Blackout lock
     document.addEventListener("DOMContentLoaded", () => {
         const path = (window.location.pathname || "").toLowerCase();
-        const isLegal = path.endsWith("/terms.html") || path.endsWith("/privacy.html");
-        if (isLegal) return;
+        const isLegal =
+            path.endsWith("/terms.html") || path.endsWith("/privacy.html");
 
-        const key = "beans4u_terms_agreed";
-        if (localStorage.getItem(key)) return;
+        const consentKey = "bean4u_consent_state"; // "accepted" | "denied"
+        const legacyKey = "beans4u_terms_agreed";
+
+        // Migrate old key (your previous accept-only modal)
+        if (localStorage.getItem(legacyKey) === "true") {
+            localStorage.setItem(consentKey, "accepted");
+            localStorage.removeItem(legacyKey);
+        }
+
+        const state = localStorage.getItem(consentKey);
+
+        const applyBlackout = () => {
+            if (document.getElementById("bean4uBlackout")) return;
+
+            const blackout = document.createElement("div");
+            blackout.id = "bean4uBlackout";
+            blackout.className = "blackoutOverlay";
+            blackout.innerHTML = `
+        <div class="blackoutCard" role="alert">
+          <div class="blackoutTitle">Access blocked</div>
+          <p class="blackoutText">
+            You disagreed with the Terms & Privacy Policy.
+            This website is locked.
+          </p>
+          <div class="blackoutActions">
+            <a class="blackoutLink" href="terms.html">Read Terms</a>
+            <a class="blackoutLink" href="privacy.html">Read Privacy</a>
+            <button class="blackoutBtn" type="button">Reload</button>
+          </div>
+        </div>
+      `;
+
+            document.body.appendChild(blackout);
+
+            const reloadBtn = blackout.querySelector("button");
+            reloadBtn.addEventListener("click", () => window.location.reload());
+        };
+
+        // If denied: lock the site, but do NOT lock legal pages
+        if (state === "denied" && !isLegal) {
+            applyBlackout();
+            return;
+        }
+
+        // If accepted: nothing to do
+        if (state === "accepted") return;
+
+        // Don't force the popup on the legal pages themselves
+        if (isLegal) return;
 
         const overlay = document.createElement("div");
         overlay.setAttribute("role", "dialog");
@@ -81,25 +129,45 @@
         overlay.className = "glassOverlay";
 
         overlay.innerHTML = `
-      <div class="glassModal" role="document">
-        <h2 class="glassTitle">Terms & Privacy</h2>
-        <p class="glassText">
-          To use this site, you need to accept our Terms and Privacy Policy.
-        </p>
+      <div class="glassModal" role="document" aria-label="Terms and privacy consent">
+        <div class="glassHeader">
+          <h2 class="glassTitle">Terms & Privacy</h2>
+          <p class="glassText">
+            To use this site, you need to accept our Terms and Privacy Policy.
+          </p>
+        </div>
+
         <div class="glassLinks">
           <a href="terms.html">Read Terms</a>
           <a href="privacy.html">Read Privacy</a>
         </div>
-        <button class="glassBtn" type="button">Accept</button>
+
+        <div class="glassActions">
+          <button class="glassBtn glassBtnPrimary" type="button">
+            Accept
+          </button>
+          <button class="glassBtn glassBtnGhost" type="button">
+            Disagree
+          </button>
+        </div>
       </div>
     `;
 
         document.body.appendChild(overlay);
 
-        const btn = overlay.querySelector("button");
-        btn.addEventListener("click", () => {
-            localStorage.setItem(key, "true");
+        const buttons = overlay.querySelectorAll("button");
+        const acceptBtn = buttons[0];
+        const denyBtn = buttons[1];
+
+        acceptBtn.addEventListener("click", () => {
+            localStorage.setItem(consentKey, "accepted");
             overlay.remove();
+        });
+
+        denyBtn.addEventListener("click", () => {
+            localStorage.setItem(consentKey, "denied");
+            overlay.remove();
+            applyBlackout();
         });
     });
 
@@ -143,7 +211,7 @@
     const posDamp = 0.52;
 
     const sizeStiff = 0.13;
-    const sizeDamp = 0.50;
+    const sizeDamp = 0.5;
 
     const getRects = () => {
         const cRect = menuContainer.getBoundingClientRect();
@@ -190,7 +258,6 @@
         tx = mouseLeft * (1 - snap) + centerLeft * snap;
         tx = clamp(tx, 6, cRect.width - tw - 6);
 
-        // Subtle tint by section (via dataset), without extra classes
         const key = link.getAttribute("data-pill") || "";
         pill.setAttribute("data-pill", key);
     };
@@ -259,7 +326,6 @@
         hidePill();
     };
 
-    // rAF-throttled pointer tracking (clean motion)
     let rafPending = false;
 
     const onMove = (e) => {
@@ -283,7 +349,6 @@
     menuContainer.addEventListener("mouseleave", onLeave);
     menuContainer.addEventListener("mousemove", onMove);
 
-    // Keyboard focus: pill follows focused item
     menuContainer.addEventListener("focusin", (e) => {
         const link = e.target.closest(".menu-list a");
         if (!link) return;
