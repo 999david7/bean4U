@@ -1,7 +1,7 @@
 <?php
 /**
  * logout.php
- * Sauberes Logout inkl. Cookie invalidieren.
+ * Sauberes Logout inkl. Session-Cookie invalidieren
  */
 
 declare(strict_types=1);

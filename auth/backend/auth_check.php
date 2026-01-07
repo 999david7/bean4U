@@ -1,7 +1,7 @@
 <?php
 /**
  * auth_check.php
- * Schützt Seiten: leitet auf login.html um, wenn nicht eingeloggt.
+ * Schützt Seiten: wenn nicht eingeloggt -> login.html
  */
 
 declare(strict_types=1);
