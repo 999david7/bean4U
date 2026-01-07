@@ -7,8 +7,8 @@
     "use strict";
 
     // ✅ PASTE EXACTLY from Supabase -> Settings -> API
-    const supabaseUrl = "PASTE_YOUR_PROJECT_URL_HERE";
-    const supabaseAnonKey = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";
+    const supabaseUrl = "https://opmfwbbynlvzqwhnpqmh.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wbWZ3YmJ5bmx2enF3aG5wcW1oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwODY4MDYsImV4cCI6MjA3NzY2MjgwNn0.SmS4N__rEP8TvY53W0dHRpclWavYyxZF225ylqCnmB0";
 
     const yearEl = document.getElementById("year");
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
