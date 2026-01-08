@@ -61,7 +61,7 @@
                     return;
                 }
 
-                alert("Registriert! Prüfe ggf. deine E-Mail zur Bestätigung.");
+                alert("Registriert! Bitte Bestätigen sie ihre E-Mail.");
                 window.location.href = "Log%20in.html";
                 return;
             }
@@ -74,7 +74,7 @@
 
             window.location.href = "../index.html";
         } catch (err) {
-            alert(err?.message ? String(err.message) : "Auth failed.");
+            alert(err?.message ? String(err.message) : "E-Mail nicht besätigt.");
             console.error(err);
         } finally {
             setLoading(false);
